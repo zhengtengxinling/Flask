@@ -1,0 +1,202 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    个人信息
+{% endblock %}
+<style>
+    {% block css %}
+        .h1_loc {
+            text-align: center;
+        }
+        .table_center {
+            text-align: center;
+        }
+        .pro_info {
+            text-align: center;
+            font-size: 15px;
+            padding-bottom: 10px;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div>
+        <div>
+            <h1 class="h1_loc">用户基本信息</h1>
+        </div>
+        <!--    所展示的用户信息    -->
+        <div>
+            <form action="{{ url_for('Manager.manager_info') }}" method="post" enctype="multipart/form-data">
+                <table class="table ">
+                    <tbody class="table_center">
+                    <tr class="table_center">
+                        <td>
+                            <span>真实姓名:</span>
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;{{ user.username }}</span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>昵称:</span>
+                            <span id="span_1" name="span_1">&nbsp;&nbsp;&nbsp;&nbsp;{{ user.nickname }}</span></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="revise1">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>电话号码:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span id="span_2" name="span_2">{{ user.phone }}</span></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="revise2">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>密码:</span>
+                            <span id="span_3" name="span_3">&nbsp;&nbsp;&nbsp;&nbsp;{{ user.password }}</span></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="revise3">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="
+                                {% if user.icon %}{{ url_for('static',filename=user.icon) }}{% else %}{{ url_for('static',filename='img/tongxiang.jpeg') }}{% endif %}"
+                                 alt="" width="100px"
+                                 height="80px"></td>
+                        <td>
+                            <input type="file" name="icon" class="hidden" id="icon_file">
+                            <button type="button" class="btn btn-primary" id="revise4">修改</button>
+                        </td>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--     班级不能为空的提示，便于之后教师通过班级进行查询学生信息-->
+                <div id="pro_info" class="pro_info">{{ msg }}</div>
+                <button type="submit" class="btn btn-default btn-primary col-md-6 col-md-offset-3" name="login_btn"
+                        id="login_btn">保&nbsp;&nbsp;&nbsp;存
+                </button>
+                <!--    修改昵称的模态框    -->
+                <div>
+                    <div class="modal" tabindex="-1" id="mymodal_1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">修改用户信息</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="rev_nickname" placeholder="请输入需要修改的昵称" id="rev_nickname">
+                                    <div id="modal_info_1"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="modal_btn1">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--    修改电话号码的模态框    -->
+                <div>
+                    <div class="modal" tabindex="-1" id="mymodal_2">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">修改用户信息</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="rev_phone" placeholder="请输入需要修改的电话号码" id="rev_phone">
+                                    <div id="modal_info_2"></div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="modal_btn2">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--    修改密码的模态框    -->
+                <div>
+                    <div class="modal" tabindex="-1" id="mymodal_3">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">修改用户信息</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="rev_secret" placeholder="请输入需要修改的密码" id="rev_secret">
+                                    <div id="modal_info_3"></div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="modal_btn3">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+<script>
+    {% block js %}
+        <!--    昵称修改的按钮事件-->
+        $('#revise1').click(function () {
+            $('#mymodal_1').modal()
+            $('#modal_btn1').click(function () {
+                var rec_nickname = document.getElementById('rev_nickname').value;
+                if (rec_nickname === '') {
+                    $('#modal_info_1').html("<p>输入框不能为空</p>").css('color', 'red');
+                } else {
+                    $('#span_1').html(rec_nickname);
+                    $('#mymodal_1').modal("hide");
+                }
+            })
+        });
+        <!--    电话号码修改的按钮事件-->
+        $('#revise2').click(function () {
+            $('#mymodal_2').modal()
+            $('#modal_btn2').click(function () {
+                var rec_phone = document.getElementById('rev_phone').value;
+                if (rec_phone.length != 6) {
+                    $('#modal_info_2').html("<p>输入的电话号码必须为六位数</p>").css('color', 'red');
+                } else {
+                    $('#span_2').html(rec_phone);
+                    $('#mymodal_2').modal("hide");
+                }
+            })
+        });
+        <!--  密码修改额按钮事件   -->
+        $('#revise3').click(function () {
+            $('#mymodal_3').modal()
+            $('#modal_btn3').click(function () {
+                var rec_sercet = document.getElementById('rev_secret').value;
+                if (rec_sercet === '') {
+                    $('#modal_info_3').html("<p>密码不能为空</p>").css('color', 'red');
+                } else {
+                    $('#span_3').html(rec_sercet);
+                    $('#mymodal_3').modal("hide");
+                }
+            })
+        });
+        <!--    头像处理的按钮事件-->;
+        $('#revise4').click(function () {
+            $('#icon_file').click()
+        })
+    {% endblock %}
+</script>

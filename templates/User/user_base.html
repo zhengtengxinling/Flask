@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+        考试管理系统
+    {% endblock %}</title>
+</head>
+<style>
+    .nav_background {
+        background-color: #d8e4ee;
+    }
+
+    .col_box {
+        height: 500px;
+        background-color: #d8e4ee;
+        margin-left: 20px;
+        padding: 0;
+        border-radius: 5%;
+    }
+
+    .col_box1 {
+        height: 500px;
+        margin-left: 40px;
+        border-radius: 5%;
+    }
+
+
+    .ul_pos {
+        padding: 10px 0 10px 0;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .ul1_pos {
+        padding: 150px 0 10px 0;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    span {
+        margin-left: 15px;
+        font-size: 20px;
+        margin-right: 15px;
+    }
+
+    .col {
+        float: right;
+    }
+
+    {% block css %}
+        .hr {
+            background-color: #6f91ad;
+            height: 3px;
+        }
+        .roll_panel {
+            height: 460px;
+            padding: 0;
+            margin: 0;
+        }
+        .scroll {
+            overflow: scroll;
+            overflow-x: hidden;
+            height: 460px;
+        }
+
+        .infor {
+            height: 10px;
+            line-height: 0px;
+        }
+
+    {% endblock %}
+</style>
+<body>
+<!--    导航条 -->
+<nav class="navbar navbar-default nav_background ">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">考试管理系统</span>
+        </div>
+        <div class="col">
+            <img src="
+                    {% if user.icon %}{{ url_for('static',filename=user.icon) }}{% else %}{{ url_for('static',filename='img/tongxiang.jpeg') }}{% endif %}"
+                 alt="" width="50px"
+                 height="50px">
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">欢迎,{{ user.nickname }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('user.user_info') }}">用户个人</a href="#"></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url_for('Login.out') }}">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<!--    导航  -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col_box">
+            <div>
+                <ul class="nav nav-pills nav-stacked ">
+                    <li role="presentation" class=" ul1_pos "><a href="{{ url_for('user.user_base') }}"
+                                                                       class="glyphicon glyphicon-envelope"><span>消息</span></a>
+                    </li>
+                    <li role="presentation" class="ul_pos"><a href="{{ url_for('user.look_paper' )}}"
+                                                              class="glyphicon glyphicon-pencil"><span>考试</span></a>
+                    </li>
+                    <li role="presentation" class="ul_pos"><a href="{{ url_for('user.look_score') }}"
+                                                              class="glyphicon glyphicon-file"><span>查看成绩</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-8 col_box1">
+            {% block body %}
+                <div class="roll_panel">
+                    <div class="scroll">
+                    {% for talk in talks %}
+                        {% for tell in talk.send_tell %}
+                            <span>{{ tell.student.username }}(老师)：{{ tell.content }}</span>
+                            <span style="float:right;">{{ tell.time }}</span>
+                            <hr>
+                        {% endfor %}
+                    {% endfor %}
+                    </div>
+                    <hr class="hr">
+                    <div class="infor">{{ msg }}</div>
+                    <!--    可以发送新的消息    -->
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<script>
+    {% block js %}
+
+    {% endblock %}
+</script>
+</body>
+</html>

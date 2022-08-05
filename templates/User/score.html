@@ -1,0 +1,51 @@
+{% extends 'User/user_base.html' %}
+{% block title %}
+    查看成绩
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+        margin: 0;
+            background-color: #d0f0fa;
+            height: 500px;
+            border-radius: 5%;
+        }
+        .scroll {
+            overflow: scroll;
+            overflow-x: hidden;
+            height: 430px;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div class="border">
+        <h2 style="text-align: center;padding-top: 20px">成绩信息</h2>
+        <div class="scroll">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <td>科目</td>
+                    <td>考试时间</td>
+                    <td>考试学科总分</td>
+                    <td>所获得分数</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student_score in score %}
+                    <tr>
+                        <td>{{ student_score.subject }}</td>
+                        <td>{{ student_score.exam_time }}</td>
+                        <td>{{ student_score.sum_score }}</td>
+                        <td>{{ student_score.student_score }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+
+    {% endblock %}
+</script>

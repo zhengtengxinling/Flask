@@ -1,0 +1,106 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    试题管理
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+            height: 500px;
+            border-radius: 5%;
+        }
+        .add_title {
+            height: 30px;
+            width: 100px;
+            float: left;
+        }
+        .select_span {
+            margin-left: 150px;
+            font-size: 25px;
+        }
+        .scroll {
+            margin-top: 30px;
+            background-color: #aed3f5;
+            height: 430px;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+
+    {% endblock %}
+</style>
+{% block img %}
+    <div class="col">
+        <img src="
+                {% if info.icon %}{{ url_for('static',filename=info.icon) }}{% else %}{{ url_for('static',filename='img/tongxiang.jpeg') }}{% endif %}"
+             alt="" width="50px"
+             height="50px">
+    </div>
+{% endblock %}
+
+{% block a %}
+    <a class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true"
+       aria-expanded="false">欢迎,{{ info.nickname }}<span class="caret"></span></a>
+{% endblock %}
+
+{% block body %}
+    <div class="border">
+        <div style="height: 30px">
+            <button class="btn btn-primary add_title" id="add_title">添加题目</button>
+            <div style="margin-right: 300px;">
+                <form action="{{ url_for('Manager.manager_paper') }}">
+                    <span class="select_span">类型：</span>
+                    <select name="select" style="width: 100px;height: 30px">
+                        <option value="ALL">ALL</option>
+                        <option value="单选题">单选题</option>
+                        <option value="多选题">多选题</option>
+                        <option value="填空题">填空题</option>
+                    </select>
+                    <button class="btn btn-info " id="select" type="submit"> 查询</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="scroll">
+            <!-- 通过查询的语句，如果他的类型为all就展示全部，否则就展示所对应的那个部分-->
+        <table class="table table-striped">
+            <thead >
+            <tr>
+                <td>内容</td>
+                <td>选项</td>
+                <td>类型 </td>
+                <td>正确选项</td>
+            </tr>
+            </thead>
+        <tbody>
+        {% if user|length !=0%}
+            {% for use in user %}
+                {% if use.type=='填空题' %}
+                    <tr>
+                    <td>{{ use.paper_content }}</td>
+                    <td></td>
+                    <td>{{ use.type }}</td>
+                     <td>{{ use.answer }}</td>
+                    </tr>
+                {% endif %}
+                {% if use.type=='单选题'or use.type=='多选题' %}
+                    <tr>
+                    <td>{{ use.paper_content }}</td>
+                    <td>{{ use.select_A }},{{ use.select_B }},{{ use.select_C }},{{ use.select_D }}</td>
+                    <td>{{ use.type }}</td>
+                    <td>{{ use.answer }}</td>
+                    </tr>
+
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        $('#add_title').click(function () {
+            location.href = '{{ url_for('Manager.add_paper')}}'
+        })
+    {% endblock %}
+</script>

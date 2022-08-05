@@ -1,0 +1,80 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    自动生成试卷
+{% endblock %}
+{% block css %}
+    .border {
+    height: 500px;
+    background-color: #aed3f5;
+    border-radius: 5%;
+    }
+{% endblock %}
+{% block body %}
+    <div class="border">
+        <div style="padding-top: 20px;padding-left: 40px">
+            <a href="{{ url_for('Manager.manager_exam') }}">
+                <span class="glyphicon glyphicon-chevron-left span_css" id="span_css">返回</span></a>
+        </div>
+        <div style="padding-top: 20px;padding-left: 20px">
+            <!--    需要多选题数目，单选题数目，填空题数目，考试科目，考试时间，结束时间，每个题目的分数 -->
+            <form action="{{ url_for('Manager.make_paper') }}" method="post">
+                <span>考试的科目:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" name="subject" id="subject"
+                           placeholder="请输入考试科目">
+                    考试班级&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" name="classroom" id="classoom"
+                           placeholder="请输入考试班级">
+                </span><br>
+                <span>考试开始时间:&nbsp;&nbsp;
+                    <input type="datetime-local" step="1" style="margin-bottom: 20px;width: 220px" name="start_time"
+                           id="start_time">
+                    考试结束时间:&nbsp;&nbsp;
+                    <input type="datetime-local" step="1" style="margin-bottom: 30px;width: 220px" name="end_time"
+                           id="end_time">
+                </span><br>
+                <span>单选题个数:&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="单选题的个数"
+                           oninput="value=value.replace(/[^\d]/g,'')" name="single_geshu" id="single_geshu">
+                    单选题的分值:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" placeholder="单选题的分值" name="single_score"
+                           id="single_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                </span>
+                <span>多选题个数:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" placeholder="多选题的个数" name="double_geshu"
+                           id="double_geshu"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                    多选题的分值:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" placeholder="多选题的分值" name="double_score"
+                           id="double_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                </span>
+                <span>填空题个数:&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" placeholder="填空题的个数" name="tiankong_geshu"
+                           id="tiankong_geshu"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                    填空题的分值:&nbsp;&nbsp;
+                    <input type="text" style="margin-bottom: 30px" placeholder="填空题的分值" name="tiankong_score"
+                           id="tiankong_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                </span>
+                <div style="text-align: center;font-size: 20px"><span id="info">{{ msg }}</span>
+                </div>
+                <button type="submit" class="btn btn-info" style="margin-left: 300px;width: 250px" id="btn"> 生成试卷
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        $('#btn').click(function () {
+            if ($('#tiankong_geshu').val() === '' && $('#tiankong_score').val() === '' && $('#double_score').val() === '' &&
+                $('#double_geshu').val() === '' && $('#single_geshu').val() === '' && $('#single_score').val() === '' &&
+                $('#end_time').val() === '' && $('#start_time').val() === '' && $('#subject').val() === '' && $('#classoom').val() === '') {
+                $('#info').html('不能为空').css('color', 'red');
+            }
+        })
+
+    {% endblock %}
+</script>

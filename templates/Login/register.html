@@ -1,0 +1,130 @@
+{% extends 'Login/login.html' %}
+{% block title %}
+    注册界面
+{% endblock %}
+<!--    修改-->
+{% block  css %}
+    .body{
+    height:90%;
+    position:absolute;
+    top:30px;
+    width:600px;
+    left:300px;
+    background-color: #f6f5f8;
+    }
+
+    .content_title{
+    width:100%;
+    height:100px;
+    margin-bottom:20px;
+    }
+
+    .span_css{
+    font-size:30px;
+    color:#91a0b5;
+    float:left;
+    margin-top:15px;
+    }
+
+{% endblock %}
+{% block body %}
+    <div class="body">
+        <div class="content_title">
+            <a href="{{ url_for('Login.login') }}">
+                <span class="glyphicon glyphicon-chevron-left span_css" id="span_css">返回</span></a>
+        </div>
+        <div>
+            <form class="form-horizontal" action="{{ url_for('Login.register') }}" method="post">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Sickname</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="text" class="form-control" id="nickName" name="register_nickname"
+                               placeholder="请输入昵称">
+                    </div>
+                </div>
+                <!--    用户名输入   -->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Username</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="text" class="form-control" id="inputName" name="register_username"
+                               placeholder="请输入真实姓名">
+                    </div>
+                </div>
+                <!--    密码输入-->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Password</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="password" class="form-control" id="inputPassword" name="register_password"
+                               placeholder="请输入密码">
+                    </div>
+                </div>
+                <!--    再次输入   -->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Confirm Password</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="password" class="form-control" id="inputPassword2" name="register_repassword"
+                               placeholder="请确定密码">
+                    </div>
+                </div>
+                <!--    电话号码输入-->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Phone</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="text" class="form-control" id="phone" name="register_phone" placeholder="请输入电话号码">
+                    </div>
+                </div>
+                <!--    密码或用户名输入错误的提示-->
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-10" id="check">
+                        <p class="pro">{{ msg }}</p>
+                    </div>
+                </div>
+                <!--    按钮事件-->
+                <div class="form-group">
+                    <div class="col-md-offset-3">
+                        <button type="submit" class="btn btn-default btn-primary col-md-9" name="register_btn"
+                                id="register_check">注&nbsp;&nbsp;&nbsp;册
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        var bt = document.querySelector("#register_check");
+
+        bt.addEventListener("click", () => {
+            var re_user = document.getElementById('inputName').value;
+            var re_pass = document.getElementById('inputPassword').value;
+            var re_repass = document.getElementById('inputPassword2').value;
+            var phone = document.getElementById('phone').value;
+            var nickname=document.getElementById('nickName').value;
+            // 判断用户名和密码框不能为空
+
+            if (phone === '') {
+                $('#check').html("<p>电话号码不能为空</p>").css('color', 'red')
+            }
+            if (re_repass === '') {
+                $('#check').html("<p>请确认密码</p>").css('color', 'red')
+            }
+            if (re_user === '' || re_pass === '') {
+                $('#check').html("<p>用户名或密码不能为空</p>").css('color', 'red')
+            }
+            if (nickname === ''){
+                $('#check').html("<p>请输入昵称</p>").css('color','red')
+            }
+            if (re_user !== '' && re_pass !== '' && re_repass !== '' && phone !== '') {
+                // 判断输入的密码和确认的密码是否一致
+                if (re_pass !== re_repass) {
+                    $('#check').html("<p>两次输入的密码不一致</p>").css('color', 'red')
+                }
+                // 判断电话号码是否为6位
+                if (phone.length !== 6) {
+                    $('#check').html("<p>电话号码必须为6位</p>").css('color', 'red')
+                }
+            }
+        })
+    {% endblock %}
+</script>

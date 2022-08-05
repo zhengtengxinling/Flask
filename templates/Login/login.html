@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+{#<script src="../../static/jquery-3.6.0.js"></script>#}
+{#<link rel="stylesheet" href="../../static/css/bootstrap.min.css">#}
+{#<script src="../../static/js/bootstrap.min.js"></script>#}
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block  title %}
+        登录首页
+    {% endblock %}</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .bg_col {
+        height: 90%;
+        width: 90%;
+        background: url("../../static/img/登录背景.png");
+        position: absolute;
+        margin-top: 25px;
+    }
+
+    .body {
+        position: absolute;
+        left: 640px;
+        background-color: #f6f5f8;
+        height: 55%;
+        width: 35%;
+        top: 200px;
+        border-radius: 10%;
+        padding: 12px;
+    }
+
+    .a_right {
+        float: right;
+    }
+
+    .pro {
+        color: red;
+    }
+
+    {% block css %}
+
+    {% endblock %}
+</style>
+<body>
+<div class="container">
+    <!--  进行整体的布局  -->
+    <div class=" bg_col">
+        <!--  登录部分      -->
+        {% block body %}
+            <div class='body'>
+            <!--    标题     -->
+            <h4>用户登录</h4>
+            <!--    登录部分    --->
+            <form class="form-horizontal" action="{{ url_for('Login.login') }}" method="post" id="form_1">
+                <!--    用户名输入   -->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Username</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="text" class="form-control" id="inputName" name="login_username"
+                               placeholder="请输入用户名">
+                    </div>
+                </div>
+                <!--    密码输入-->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Password</label>
+                    <div class="col-md-offset-1 col-md-8">
+                        <input type="password" class="form-control" id="inputPassword" name="login_password"
+                               placeholder="请输入密码">
+                    </div>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="select" value="1" id="select_1"> 学生
+                    </label>
+                    <label>
+                        <input type="radio" name="select" value="2" id="select_2"> 老师
+                    </label>
+                </div>
+                <!--    密码或用户名输入错误的提示-->
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-10 " id="check">
+                        <p class="pro">{{ msg }}
+                            {% for message in get_flashed_messages() %}
+                                {{ message }}
+                                   {% endfor %} </p>
+                    </div>
+                </div>
+                <!--    按钮事件-->
+                <div class="form-group">
+                    <div class="col-md-offset-3">
+                        <button type="submit" class="btn btn-default btn-primary col-md-9" name="login_btn"
+                                id="login_btn" onsubmit="return false">登&nbsp;&nbsp;&nbsp;录
+                        </button>
+                    </div>
+                </div>
+                <!--    用户注册和忘记密码-->
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-4">
+                        <a href={{ url_for('Login.register') }}>新用户注册</a>
+                    </div>
+                    <div class="col-md-4 a_right">
+                        <a href='{{ url_for('Login.get_secret') }}'>忘记密码</a>
+                    </div>
+                </div>
+            </form>
+        {% endblock %}
+        </div>
+    </div>
+</div>
+<script>
+    {% block js %}
+
+        var bt = document.querySelector("#login_btn");
+
+        bt.addEventListener("click", () => {
+            var username = document.querySelector("#inputName").value;
+            var password = document.querySelector("#inputPassword").value;
+
+            if (username === '' || password === '') {
+                $('#check').html("<p>用户名或者密码不能为空</p>").css('color', 'red')
+            }
+            var select = document.getElementsByName('select');
+            var flag = false;
+            for (var i = 0; i < select.length; i++) {
+                if (select[i].checked === true) {
+                    flag = true;
+                }
+            }
+            if (flag === false) {
+                $('#check').html("<p>请选择类型</p>").css('color', 'red')
+            }
+        })
+        $('.pro').fadeOut(1000);
+
+    {% endblock %}
+
+</script>
+</body>
+</html>

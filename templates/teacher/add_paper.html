@@ -1,0 +1,79 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    增加试题
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+            height: 500px;
+            background-color: #aed3f5;
+            border-radius: 5%;
+        }
+        .border_bottom {
+            height: 400px;
+            margin-top: 30px;
+            margin-left: 180px;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <!--     对form表单的选择-->
+
+    <div class="border">
+        <div style="padding-top: 20px;padding-left: 40px">
+            <a href="{{ url_for('Manager.manager_paper') }}">
+                <span class="glyphicon glyphicon-chevron-left span_css" id="span_css">返回</span></a>
+        </div>
+        <div class="border_bottom">
+            <form action="{{ url_for('Manager.add_paper') }}" method="post">
+                <select name="select" id="select" style="height: 30px;width: 150px;margin-bottom: 10px">
+                    <option value="all">请选择题目类型</option>
+                    <option value="单选题">单选题</option>
+                    <option value="多选题">多选题</option>
+                    <option value="填空题">填空题</option>
+                </select>
+                <p>请输入题目: <input placeholder="请输入需要出的题目" id="input_content" name="content">
+                </p>
+                <p>若是选择题，务必填上<span id="span_title"></span></p>
+                <input type="text" placeholder="A选项" name="input_A" id="input_A" style="margin-top: 15px"><br>
+                <input type="text" placeholder="B选项" name="input_B" id="input_B" style="margin-top: 15px"><br>
+                <input type="text" placeholder="C选项" name="input_C" id="input_C" style="margin-top: 15px"><br>
+                <input type="text" placeholder="D选项" name="input_D" id="input_D" style="margin-top: 15px"><br>
+                <p> 请输入答案 <input type="text" placeholder="请输入答案" name="answer" id="answer" style="margin-top: 30px"></p>
+                <div id="info">{{ msg }}</div>
+                <button type="submit" id="sure" class="btn btn-primary" style="width: 250px;">增加试题</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        $('#sure').click(function () {
+            if ($('#answer').val() === '') {
+                $('#info').html('<p>答案不能为空</p>').css('color', 'red')
+            }
+            const type = $('#select option:selected').val();
+            if (type === '填空题') {
+                $('#input_A').val('');
+                $('#input_B').val('');
+                $('#input_C').val('');
+                $('#input_D').val('');
+            } else {
+                if (($('#input_A').val() === '' || $('#input_B').val() === '' || $('#input_C').val() === '' || $('#input_D').val() === '')) {
+                    $('#info').html('<p>选择项不能为空</p>').css('color', 'red')
+                }
+                $('#input_A').val('A、' + $('#input_A').val());
+                $('#input_B').val('B、' + $('#input_B').val());
+                $('#input_C').val('C、' + $('#input_C').val());
+                $('#input_D').val('D、' + $('#input_D').val());
+
+            }
+            if ($('#input_content').val() === '') {
+                $('#info').html('<p>请输入需要出的题目</p>').css('color', 'red')
+            }
+            if (type === 'all') {
+                $('#info').html('<p>请选择类型</p>').css('color', 'red')
+            }
+        })
+    {% endblock %}
+</script>

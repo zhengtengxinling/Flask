@@ -1,0 +1,59 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    查看学生成绩
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+            height: 500px;
+            background-color: #dbf5fd;
+            border-radius: 5%;
+        }
+        .scroll{
+        overflow: scroll;
+        overflow-x: hidden;
+        height: 430px;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div class="border">
+        <div style="height: 50px;padding-top: 10px;margin-left: 300px">
+            <form action="{{ url_for('Manager.student_score') }}"><input type="text" placeholder="请输入你需要查询的内容"
+                                                                         style="height: 40px" name="select">
+                <button class="btn btn-info" style="height: 40px">查询</button>
+            </form>
+        </div>
+        <div style="padding-top: 30px" class="scroll">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <td>姓名</td>
+                    <td>班级</td>
+                    <td>考试时间</td>
+                    <td>考试科目</td>
+                    <td>科目总分</td>
+                    <td>学生所考分数</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student_score in score %}
+                <tr>
+                    <td>{{ student_score.username }}</td>
+                    <td>{{ student_score.classroom }}</td>
+                    <td>{{ student_score.exam_time }}</td>
+                    <td>{{ student_score.subject }}</td>
+                    <td>{{ student_score.sum_score }}</td>
+                    <td> {{ student_score.student_score}}</td>
+                </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+
+    {% endblock %}
+</script>

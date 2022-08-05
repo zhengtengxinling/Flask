@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>考试</title>
+</head>
+<style>
+    .backgroup {
+        height: 600px;
+        margin-left: 30px;
+        width: 1200px;
+        background-color: #f5ebd9;
+        padding-left: 30px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+</style>
+<body>
+<div class="backgroup">
+    <div style="text-align: center"><h3>考试科目:{{ exam.exam_name }}</h3>
+        <span style="font-size: 20px;">考试时间:&nbsp;&nbsp;&nbsp;{{ exam.start_time }}~{{ exam.end_time }}<span
+                id="span">(总时长共{{ time }})</span></span>
+        <span style="font-size: 20px;padding-left: 200px;"> 出卷老师:&nbsp;&nbsp;&nbsp;{{ exam.teacher }}</span><br>
+        <p style="font-size: 20px;margin-top: 20px">离考试结束还有：
+            <span id="d">00</span>天
+            <span id="h">00</span>时
+            <span id="m">00</span>分
+            <span id="s">00</span>秒
+        </p>
+    </div>
+    <div style="margin-left: 30px;margin-top: 40px">
+        <form action="{{ url_for('user.exam') }}" method="post">
+            {% for paper in exam_info %}
+                {% if paper.type=='填空题' %}
+                    <p style="font-size: 20px;margin-bottom: 20px">({{ paper.type }}
+                        )&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.paper_content }}({{ paper.score }}分)
+                        <span><input style="margin-left: 100px;" placeholder="请输入你的答案" name="student_answer"></span>
+                    </p>
+                {% endif %}
+                {% if paper.type=='单选题' or paper.type=='多选题' %}
+                    <p style="font-size: 20px;margin-bottom: 20px">({{ paper.type }}
+                        )&nbsp;&nbsp;&nbsp;&nbsp;{{ paper.paper_content }}({{ paper.score }}分)
+                        <span><input style="margin-left: 100px" placeholder="请输入你的答案" name="student_answer"></span>
+                    </p>
+                    <p style="font-size:20px ;margin-bottom: 20px;margin-left: 100px">{{ paper.select_A }}&nbsp;&nbsp;&nbsp;&nbsp; {{ paper.select_B }}
+                        &nbsp;&nbsp;&nbsp;&nbsp; {{ paper.select_C }}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{ paper.select_D }}</p>
+                {% endif %}
+            {% endfor %}
+            <button class="btn btn-info" type="submit" id="btn"
+                    style="margin-left: 350px;margin-top:50px;height: 50px;width: 200px;text-align: center">提交试卷
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    var start_time = new Date("{{ exam.start_time }}")
+    var end_time = new Date("{{ exam.end_time }}")
+
+    function countdown() {
+        {#    获取考试开始的时间和结束的时间     #}
+        var count = (end_time - start_time) / 1000;
+        var d = parseInt(count / 60 / 60 / 24);
+        d = d < 10 ? '0' + d : d;
+        var h = parseInt(count / 60 / 60 % 24);
+        h = h < 10 ? '0' + h : h;
+        var m = parseInt(count / 60 % 60);
+        m = m < 10 ? '0' + m : m;
+        var s = parseInt(count % 60);
+        s = s < 10 ? '0' + 's' : s;
+        document.querySelector('#d').innerHTML = d.toString();
+        document.querySelector('#h').innerHTML = h.toString();
+        document.querySelector('#m').innerHTML = m.toString();
+        document.querySelector('#s').innerHTML = s.toString();
+        start_time = new Date(start_time.getTime() + 1000)
+        if (count === 0) {
+            alert('考试结束，将自动提交试卷')
+            location.href = '{{ url_for('user.look_paper') }}'
+        }
+    }
+
+    countdown();
+    setInterval(countdown, 1000);
+    $('#btn').click(function () {
+        var info=confirm('你是否确定交卷？')
+        if (info===true) {
+            location.href = '{{ url_for('user.look_paper') }}'
+        }
+        else{
+            location.href='{{ url_for('user.exam') }}'
+        }
+    })
+
+</script>
+</html>

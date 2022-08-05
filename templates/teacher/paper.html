@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>试卷</title>
+
+</head>
+<style>
+    .backgroup {
+        height: 550px;
+        margin-left: 30px;
+        width: 1200px;
+        background-color: #fdfaf4;
+        padding-left: 30px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    .span_css{
+        font-size: 20px;
+    }
+
+</style>
+<body>
+<div class="backgroup">
+        <div style="padding-top: 20px;padding-left: 40px">
+            <a href="{{ url_for('Manager.manager_exam') }}">
+                <span class="glyphicon glyphicon-chevron-left span_css" id="span_css">返回</span></a>
+        </div>
+
+    <div>
+        <h3 style="text-align: center;font-size: 30px">考试科目:&nbsp;&nbsp;&nbsp;{{ user.exam[-1].exam_name }}</h3>
+        <span style="font-size: 20px;">考试时间:&nbsp;&nbsp;&nbsp;{{ user.exam[-1].start_time }}~{{ user.exam[-1].end_time }}</span>
+        <span style="font-size: 20px;padding-left: 200px;"> 出卷老师:&nbsp;&nbsp;&nbsp;{{ user.exam[0].teacher }}</span><br>
+    </div>
+    <div style="margin-top: 50px;padding-left: 30px">
+        {% for title in exam %}
+            {% if title.type=='填空题' %}
+                <p style="margin-top: 10px">
+                    <span style="font-size: 20px;">问题:&nbsp;&nbsp;&nbsp;{{ title.paper_content }}</span>
+                    <span style="font-size: 20px;margin-left: 30px"> 答案:&nbsp;&nbsp;&nbsp;{{ title.answer }}</span>
+                    <span style="font-size: 20px;margin-left: 30px;color: red">分值:&nbsp;&nbsp;&nbsp;{{ title.score }}</span>
+                </p>
+            {% endif %}
+            {% if title.type=='单选题'or title.type=='多选题' %}
+                <p style="margin-top: 10px">
+                    <span style="font-size: 20px;">问题:&nbsp;&nbsp;&nbsp;{{ title.paper_content }}</span>
+                    <span style="font-size: 20px;margin-left: 30px">{{ title.select_A }} {{ title.select_B }}
+                    {{ title.select_C }} {{ title.select_D }}</span>
+                    <span style="font-size: 20px;margin-left: 30px"> 答案:&nbsp;&nbsp;&nbsp;{{ title.answer }}</span>
+                    <span style="font-size: 20px;margin-left: 30px;color: red">分值:&nbsp;&nbsp;&nbsp;{{ title.score }}</span>
+                </p>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+{% extends 'User/user_base.html' %}
+{% block title %}
+    查看考试
+{% endblock %}
+<style>
+    {% block css %}
+        .body {
+            height: 500px;
+            background-color: #daf2fa;
+            border-radius: 5%;
+        }
+        .scroll {
+            overflow: scroll;
+            height: 370px;
+            overflow-x: hidden;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div class="body">
+        <div style="height: 50px;">
+            <button class="btn btn-danger" id="enter_exam"
+                    style="margin-top: 20px;margin-left: 20px;height: 30px;width: 100px">
+                进入考试
+            </button>
+        </div>
+        <div style="height: 470px">
+            <h2 style=" text-align: center">考试通知</h2>
+            <div class="scroll" style="margin-top: 20px">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <td>考试科目</td>
+                        <td>出卷老师</td>
+                        <td>考试开始时间</td>
+                        <td>考试结束时间</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for exam in exam_info %}
+                    <tr>
+                    <td>{{ exam.exam_name }}</td>
+                    <td>{{ exam.teacher }}</td>
+                    <td>{{ exam.start_time }}</td>
+                    <td>{{ exam.end_time }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        <!-- 跳转页面，进入考试-->
+        $('#enter_exam').click(function () {
+            location.href = '{{ url_for('user.exam') }}';
+        })
+    {% endblock %}
+</script>

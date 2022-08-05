@@ -1,0 +1,76 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    考试页面
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+            height: 500px;
+            border-radius: 5%;
+        }
+        .border_bottom {
+            height: 420px;
+            border-radius: 5%;
+            background-color: #aed3f5;
+
+            margin-top: 30px;
+        }
+        .scroll {
+            padding-top: 20px;
+            height: 430px;
+            margin-left: 10px;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div class="border">
+        <div class="border_top" style="height: 50px;margin-left: 50px;padding-top: 20px">
+            <div style="float: left">
+
+                <button class="btn btn-info" style="margin-right:30px" id="ramdon_paper">题库自选生成试卷</button>
+                <button class="btn btn-info"id="hand_paper">手动生成试卷</button>
+            </div>
+            <form action="{{ url_for('Manager.manager_exam') }}">
+                <input placeholder="请输入需要查询的考试科目" style="height: 40px;margin-left: 100px;" name="select_subject">
+                <button class="btn btn-info"> 查询</button>
+                <span>{{ msg }}</span>
+            </form>
+        </div>
+        <div class="border_bottom">
+            <div class="scroll">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td><span>开考时间</span></td>
+                        <td><span>结束时间</span></td>
+                        <td><span>考试科目</span></td>
+                        <td><span>班级</span></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for use in exam %}
+                        <tr>
+                            <td><span>{{ use.start_time }}</span></td>
+                            <td><span>{{ use.end_time }}</span></td>
+                            <td><span>{{ use.exam_name }}</span></td>
+                            <td><span>{{ use.classroom }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        $('#ramdon_paper').click(function () {
+            location.href = '{{ url_for('Manager.make_paper') }}'
+        })
+        $('#hand_paper').click(function () {
+            location.href='{{ url_for('Manager.hand_paper') }}'
+        })
+    {% endblock %}
+</script>

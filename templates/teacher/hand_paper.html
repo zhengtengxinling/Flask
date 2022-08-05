@@ -1,0 +1,126 @@
+{% extends 'teacher/manager_base.html' %}
+{% block title %}
+    考试页面
+{% endblock %}
+<style>
+    {% block css %}
+        .border {
+            height: 500px;
+            border-radius: 5%;
+        }
+        .border_bottom {
+            height: 500px;
+            width: 850px;
+            border-radius: 5%;
+            background-color: #aed3f5;
+
+        }
+        .scroll {
+            padding-top: 20px;
+            height: 200px;
+            width: 850px;
+            margin-left: 10px;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+        .span_css{
+        height: 20px;
+        width: 100px;
+        }
+    {% endblock %}
+</style>
+{% block body %}
+    <div class="border">
+        <div class="border_bottom">
+            <a href="{{ url_for('Manager.manager_exam') }} ">
+                <span class="glyphicon glyphicon-chevron-left span_css" id="span_css" style="margin-top:30px ">返回</span></a>
+            <form action="{{ url_for('Manager.hand_paper') }}">
+                <div class="scroll">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td><span>内容</span></td>
+                            <td><span>选项</span></td>
+                            <td><span>类型</span></td>
+                            <td><span>答案</span></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for use in user.paper %}
+                            {% if use.type=='填空题' %}
+                                <tr>
+                                    <td><input type="checkbox" name="checkbox" id="tiankong" class="c1"
+                                               value="{{ use.paper_id }}"
+                                               style="width: 20px;height: 20px;margin-right: 10px">{{ use.paper_content }}
+                                    </td>
+                                    <td></td>
+                                    <td>{{ use.type }}</td>
+                                    <td>{{ use.answer }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if use.type=='单选题'or use.type=='多选题' %}
+                                <tr>
+                                    <td><input type="checkbox" name="checkbox" id="check" value="{{ use.paper_id }}" class="c1"
+                                               style="width: 20px;height: 20px;margin-right: 10px">{{ use.paper_content }}
+                                    </td>
+                                    <td>{{ use.select_A }},{{ use.select_B }},{{ use.select_C }},{{ use.select_D }}</td>
+                                    <td>{{ use.type }}</td>
+                                    <td>{{ use.answer }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 30px;text-align: center">
+                    考试的科目:&nbsp;&nbsp;&nbsp;
+                    <input type="text" name="subject" id="subject"
+                           placeholder="请输入考试科目">
+                    考试班级&nbsp;&nbsp;&nbsp;
+                    <input type="text" name="classroom" id="classoom"
+                           placeholder="请输入考试班级">
+                    <br>
+                </div>
+                <div style="margin-top: 30px;text-align: center">
+                    考试开始时间:&nbsp;&nbsp;
+                    <input type="datetime-local" step="1" style="width: 220px" name="start_time"
+                           id="start_time">
+                    考试结束时间:&nbsp;&nbsp;
+                    <input type="datetime-local" step="1" style="width: 220px" name="end_time"
+                           id="end_time">
+                </div>
+                <div style="margin-top: 30px;margin-left: 10px">
+                    单选题的分值:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="width: 150px;margin-right: 20px;" placeholder="单选题的分值" name="single_score"
+                           id="single_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                    多选题的分值:&nbsp;&nbsp;&nbsp;
+                    <input type="text" style="width: 150px;margin-right: 20px" placeholder="多选题的分值" name="double_score"
+                           id="double_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                    填空题的分值:&nbsp;&nbsp;
+                    <input type="text" style="width: 150px;" placeholder="填空题的分值" name="tiankong_score"
+                           id="tiankong_score"
+                           oninput="value=value.replace(/[^\d]/g,'')">
+                </div>
+                <button type="submit" class="btn btn-info" style="width: 200px;margin-left: 300px;margin-top: 30px" id="btn">
+                    生成试卷
+                </button>
+            <span id="info">{{ msg }}</span>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        $('#btn').click(function () {
+            if($('input.c1:checked ').length===0){
+                $('#info').html('请选择需要选的题目').css('color','red')
+            }
+            if($('#start_time').val()===''&& $('#end_time').val()==='' &&
+                $('#tiankong_score').val()===''&& $('#single_score').val()===''&& $('#double_score').val()===''){
+                $('#info').html('不能为空，请重新输入').css('color','red')
+            }
+        })
+    {% endblock %}
+</script>
